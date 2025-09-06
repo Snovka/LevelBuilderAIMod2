@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch: # можливість запускати вручну
+  workflow_dispatch:
 
 jobs:
   build:
@@ -17,7 +17,10 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake g++ build-essential
+          sudo apt-get install -y cmake g++ build-essential git
+
+      - name: Clone Geode SDK
+        run: git clone https://github.com/Geode-sdk/Geode.git GeodeSDK
 
       - name: Create build directory
         run: mkdir -p build
@@ -25,20 +28,15 @@ jobs:
       - name: Run CMake
         run: |
           cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DGEODE_DIR=$GITHUB_WORKSPACE/GeodeSDK
 
       - name: Build shared library
         run: |
           cd build
           cmake --build . --config Release
 
-      - name: Prepare ZIP
-        run: |
-          cd build
-          zip -r LevelBuilderAI.zip ./LevelBuilderAI.so
-
-      - name: Upload artifact
+      - name: Upload .so artifact
         uses: actions/upload-artifact@v4
         with:
-          name: LevelBuilderAI
-          path: build/LevelBuilderAI.zip
+          name: LevelBuilderAI-so
+          path: build/LevelBuilderAI.so
