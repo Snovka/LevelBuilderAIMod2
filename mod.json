@@ -1,0 +1,9 @@
+{
+  "geode": "1.3.0",
+  "version": "v1.0.0",
+  "id": "snovka.levelbuilderai",
+  "name": "LevelBuilder AI",
+  "developer": "Snovka999",
+  "description": "AI, що генерує рівні з UI",
+  "dependencies": []
+}
