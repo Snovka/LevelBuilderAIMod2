@@ -1,5 +1,6 @@
 #include <Geode/Geode.hpp>
 #include <Geode/modify/MenuLayer.hpp>
+#include "LevelBuilderUI.hpp"
 
 using namespace geode::prelude;
 
@@ -23,6 +24,8 @@ class $modify(MyMenu, MenuLayer) {
     }
 
     void onOpenUI(CCObject*) {
-        FLAlertLayer::create("LevelBuilderAI", "UI ще в розробці!", "OK")->show();
+        auto scene = CCDirector::sharedDirector()->getRunningScene();
+        auto ui = LevelBuilderUI::create();
+        scene->addChild(ui, 1000); // поверх всього
     }
 };
