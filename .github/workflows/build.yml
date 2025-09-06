@@ -2,8 +2,7 @@ name: Build LevelBuilderAI
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -11,30 +10,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
       - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y cmake g++ build-essential git
+        run: sudo apt-get update && sudo apt-get install -y cmake g++ build-essential git
 
       - name: Clone Geode SDK
         run: git clone https://github.com/Geode-sdk/Geode.git GeodeSDK
 
-      - name: Create build directory
-        run: mkdir -p build
-
-      - name: Run CMake
+      - name: Build .so
         run: |
+          mkdir -p build
           cd build
           cmake .. -DCMAKE_BUILD_TYPE=Release -DGEODE_DIR=$GITHUB_WORKSPACE/GeodeSDK
-
-      - name: Build shared library
-        run: |
-          cd build
-          cmake --build . --config Release
-
+          cmake --build .
+          
       - name: Upload .so artifact
         uses: actions/upload-artifact@v4
         with:
