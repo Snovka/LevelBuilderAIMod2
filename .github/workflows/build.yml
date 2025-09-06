@@ -1,0 +1,44 @@
+name: Build LevelBuilderAI
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # можливість запускати вручну
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++ build-essential
+
+      - name: Create build directory
+        run: mkdir -p build
+
+      - name: Run CMake
+        run: |
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build shared library
+        run: |
+          cd build
+          cmake --build . --config Release
+
+      - name: Prepare ZIP
+        run: |
+          cd build
+          zip -r LevelBuilderAI.zip ./LevelBuilderAI.so
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: LevelBuilderAI
+          path: build/LevelBuilderAI.zip
