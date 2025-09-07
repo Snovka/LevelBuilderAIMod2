@@ -1,31 +1,12 @@
-#include <Geode/Geode.hpp>
-#include <Geode/modify/MenuLayer.hpp>
-#include "LevelBuilderUI.hpp"
+#include <jni.h>
+#include <android/log.h>
 
-using namespace geode::prelude;
+#define LOG_TAG "LevelBuilderAIStub"
+#define LOGI(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
 
-class $modify(MyMenu, MenuLayer) {
-    bool init() {
-        if (!MenuLayer::init()) return false;
-
-        auto btn = CCMenuItemLabel::create(
-            CCLabelBMFont::create("AI Builder", "bigFont.fnt"),
-            this,
-            menu_selector(MyMenu::onOpenUI)
-        );
-
-        auto menu = this->getChildByID("main-menu");
-        if (menu) {
-            menu->addChild(btn);
-            btn->setPosition({100, 100});
-        }
-
-        return true;
-    }
-
-    void onOpenUI(CCObject*) {
-        auto scene = CCDirector::sharedDirector()->getRunningScene();
-        auto ui = LevelBuilderUI::create();
-        scene->addChild(ui, 1000); // поверх всього
-    }
-};
+// Викликається при завантаженні бібліотеки
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
+    LOGI("LevelBuilderAI (Stub) запущено!");
+    LOGI("Це лише заглушка. Завантажте повну версію з GitHub: https://github.com/Snovka999/LevelBuilderAIMod2");
+    return JNI_VERSION_1_6; 
+}
