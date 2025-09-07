@@ -1,32 +1,32 @@
-name: Build LevelBuilderAI
+name: Build Stub Mod
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y cmake g++ build-essential git
+      - name: Install deps
+        run: sudo apt-get update && sudo apt-get install -y cmake g++
 
-      - name: Clone Geode SDK
-        run: git clone https://github.com/Geode-sdk/Geode.git GeodeSDK
+      - name: Make build dir
+        run: mkdir -p build
 
-      - name: Build .so
-        run: |
-          mkdir -p build
-          cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -DGEODE_DIR=$GITHUB_WORKSPACE/GeodeSDK
-          cmake --build .
-          
+      - name: Configure CMake
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build project
+        run: cmake --build build --config Release
+
       - name: Upload .so artifact
         uses: actions/upload-artifact@v4
         with:
-          name: LevelBuilderAI-so
-          path: build/LevelBuilderAI.so
+          name: LevelBuilderAI-Stub
+          path: build/*.so
